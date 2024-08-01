@@ -1,0 +1,73 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome To Pinewood Customer CRUD App</h1>
+
+    <h2>Create Customer</h2>
+    <form method="post">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="Name" required/>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="Email" required/>
+        </div>
+        <div>
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" id="phoneNumber" name="PhoneNumber" required/>
+        </div>
+        <div>
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" name="DateOfBirth" required/>
+        </div>
+        <button type="submit" asp-page-handler="Create">Create New Customer</button>
+    </form>
+
+    <h2>Customers Table</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Date Of Birth</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var customer in Model.Customers)
+        {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.Name</td>
+                <td>@customer.Email</td>
+                <td>@customer.PhoneNumber</td>
+                <td>@customer.DateOfBirth.ToShortDateString()</td>
+                <td>
+                    <form method="post" style="display: inline;">
+                        <input type="hidden" name="id" value="@customer.Id" />
+                        <button type="submit" asp-page-handler="Delete">Delete</button>
+                    </form>
+                    <button type="submit" asp-page-handler="Edit" disabled>Edit</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <div>
+        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+            <a class="page-link" asp-page="./Index" asp-route-currentPage="@(Model.CurrentPage - 1)">Previous</a>
+        </li>
+        <span>Page @Model.CurrentPage</span>
+        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+            <a class="page-link" asp-page="./Index" asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a>
+        </li>
+    </div>
+</div>
